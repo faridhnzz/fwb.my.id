@@ -1,0 +1,11 @@
+/*
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-XSS-Protection: 1; mode=block
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
+https://:commit.:project.pages.dev/*
+  X-Robots-Tag: noindex
