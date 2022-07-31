@@ -3,24 +3,7 @@ import sha256 from 'crypto-js/sha256';
 // Copyright Year
 document.getElementById('year').innerHTML = new Date().getFullYear();
 
-// Get name of domain
-function domainName() {
-  const hostname = window.location.hostname;
-  const getName = hostname.split('.');
-  if (getName.includes('www')) {
-    getName.shift();
-    document.title = getName[0];
-    // document.getElementById('nameTitle').innerHTML = getName[0];
-    document.getElementById('nameTitle2').innerHTML = getName[0];
-    document.getElementById('nameTitle3').innerHTML = getName[0];
-  } else {
-    document.title = getName[0];
-    // document.getElementById('nameTitle').innerHTML = getName[0];
-    document.getElementById('nameTitle2').innerHTML = getName[0];
-    document.getElementById('nameTitle3').innerHTML = getName[0];
-  }
-}
-
+// Safe Mail
 function safeMail() {
   const dataAttrNames = {
     email: 'email_b64',
@@ -50,7 +33,7 @@ function safeMail() {
       element.innerHTML = obfuscateInnerHtml(atob(readAttr(dataAttrNames.email)));
     }
     element.addEventListener('click', (ev) => {
-      const href = atob('bWFpbHRvOg==') /* mailto: */ + atob(readAttr(dataAttrNames.email)) + ev.preventDefault();
+      const href = atob('bWFpbHRvOg==') + atob(readAttr(dataAttrNames.email)) + ev.preventDefault();
       window.location.href = href;
     });
   }
@@ -66,8 +49,6 @@ function safeMail() {
   }
 }
 
-/**
- * Hmm...
- */
-domainName();
 safeMail();
+
+console.log('ಠ_ಠ Hey you mother father!! \nthis website is open source : https://github.com/faridhnzz/fwb.my.id');

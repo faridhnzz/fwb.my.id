@@ -10,6 +10,8 @@
   }
 
   body {
-    @apply min-h-screen bg-slate-900;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    @apply bg-slate-900 font-Saira;
   }
 }
