@@ -1,21 +1,24 @@
 import sha256 from 'crypto-js/sha256';
+import Base64 from 'crypto-js/enc-base64';
+import Utf8 from 'crypto-js/enc-utf8';
 
 // Copyright Year
-document.getElementById('year').innerHTML = new Date().getFullYear();
+var year = new Date().getFullYear();
+document.getElementById('year').innerHTML = year;
 
 // Safe Mail
 function safeMail() {
-  const dataAttrNames = {
-    email: 'email_b64',
+  var dataName = {
+    email: 'email',
   };
 
   function obfuscateInnerHtml(text) {
-    const chars = text.split('');
-    const reversed = chars.reverse();
+    var chars = text.split('');
+    var reversed = chars.reverse();
     let result = '';
     reversed.forEach((char) => {
-      const randomText = sha256(char);
-      result += `<em style="display:none;">${randomText}</em>`;
+      var randomText = sha256(char);
+      result += `<p style="display:none;">${randomText}</p>`;
       result += `<span>${char}</span>`;
     });
     return result;
@@ -27,19 +30,20 @@ function safeMail() {
   }
 
   function initializeElement(element) {
-    const readAttr = (name) => element.dataset[name];
+    var readAttr = (name) => element.dataset[name];
     styleElement(element);
     if (!element.innerHTML.trim()) {
-      element.innerHTML = obfuscateInnerHtml(atob(readAttr(dataAttrNames.email)));
+      element.innerHTML = obfuscateInnerHtml(Base64.parse(readAttr(dataName.email)).toString(Utf8));
     }
+
     element.addEventListener('click', (ev) => {
-      const href = atob('bWFpbHRvOg==') + atob(readAttr(dataAttrNames.email)) + ev.preventDefault();
+      var href = Base64.parse('bWFpbHRvOg==').toString(Utf8) + Base64.parse(readAttr(dataName.email)).toString(Utf8);
       window.location.href = href;
     });
   }
 
   function initializeAll() {
-    const elements = document.querySelectorAll(`[data-${dataAttrNames.email}]`);
+    var elements = document.querySelectorAll(`[data-${dataName.email}]`);
     elements.forEach((element) => initializeElement(element));
   }
 
@@ -50,5 +54,3 @@ function safeMail() {
 }
 
 safeMail();
-
-console.log('ಠ_ಠ Hey you mother father!! \nthis website is open source : https://github.com/faridhnzz/fwb.my.id');
