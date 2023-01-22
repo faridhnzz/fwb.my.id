@@ -1,7 +1,7 @@
 import Utf8 from 'crypto-js/enc-utf8';
 import Base64 from 'crypto-js/enc-base64';
 import SHA256 from 'crypto-js/sha256';
-import { parseDomain, ParseResultType } from 'parse-domain';
+import { parseDomain, ParseResultType } from 'parse-domain/build/parse-domain';
 
 /**
  * Copyright

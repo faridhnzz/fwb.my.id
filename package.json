@@ -4,11 +4,14 @@
   "version": "1.2.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --emptyOutDir",
-    "preview": "vite preview"
+    "build": "npm-run-all update:domain build:vite",
+    "build:vite": "vite build --emptyOutDir",
+    "preview": "vite preview",
+    "update:domain": "npx parse-domain-update"
   },
   "devDependencies": {
     "javascript-obfuscator": "^4.0.0",
+    "npm-run-all": "^4.1.5",
     "prettier": "^2.6.2",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "rollup-plugin-obfuscator": "^0.2.2",
