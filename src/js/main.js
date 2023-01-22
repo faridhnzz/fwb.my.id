@@ -1,24 +1,37 @@
-import sha256 from 'crypto-js/sha256';
-import Base64 from 'crypto-js/enc-base64';
 import Utf8 from 'crypto-js/enc-utf8';
+import Base64 from 'crypto-js/enc-base64';
+import SHA256 from 'crypto-js/sha256';
+import { parseDomain, ParseResultType } from 'parse-domain';
 
-// Copyright Year
-var year = new Date().getFullYear();
-document.getElementById('year').innerHTML = year;
+/**
+ * Copyright
+ */
+function copyright() {
+  var year = new Date().getFullYear();
+  document.getElementById('year').innerHTML = year;
+}
 
-// Safe Mail
+/**
+ * Safe Mail
+ */
 function safeMail() {
-  var dataName = {
-    email: 'email',
-  };
+  var email = import.meta.env.VITE_CONTACT_EMAIL;
+
+  var wordArray = Utf8.parse(email);
+  var encryptedEmail = Base64.stringify(wordArray);
+
+  function initializeAll() {
+    var elements = document.querySelectorAll(`[id-email]`);
+    elements.forEach((element) => initializeElement(element));
+  }
 
   function obfuscateInnerHtml(text) {
     var chars = text.split('');
     var reversed = chars.reverse();
     let result = '';
     reversed.forEach((char) => {
-      var randomText = sha256(char);
-      result += `<p style="display:none;">${randomText}</p>`;
+      var randomText = SHA256(char);
+      result += `<span style="display:none;">${randomText}</span>`;
       result += `<span>${char}</span>`;
     });
     return result;
@@ -30,27 +43,63 @@ function safeMail() {
   }
 
   function initializeElement(element) {
-    var readAttr = (name) => element.dataset[name];
     styleElement(element);
     if (!element.innerHTML.trim()) {
-      element.innerHTML = obfuscateInnerHtml(Base64.parse(readAttr(dataName.email)).toString(Utf8));
+      element.innerHTML = obfuscateInnerHtml(Base64.parse(encryptedEmail).toString(Utf8));
     }
 
     element.addEventListener('click', (ev) => {
-      var href = Base64.parse('bWFpbHRvOg==').toString(Utf8) + Base64.parse(readAttr(dataName.email)).toString(Utf8);
+      var href = Base64.parse('bWFpbHRvOg==').toString(Utf8) + Base64.parse(encryptedEmail).toString(Utf8);
       window.location.href = href;
     });
   }
 
+  document.addEventListener('DOMContentLoaded', () => initializeAll());
+}
+
+/**
+ * Your Ip
+ */
+function ntIp() {
   function initializeAll() {
-    var elements = document.querySelectorAll(`[data-${dataName.email}]`);
-    elements.forEach((element) => initializeElement(element));
+    var itemIp = document.getElementById('nt-item-ip');
+    var ipReveal = document.getElementById('nt-ip-reveal');
+
+    itemIp && 'classList' in itemIp && itemIp.classList.remove('hidden'),
+      ipReveal.addEventListener('click', function () {
+        ipReveal.classList.add('hidden');
+        document.getElementById('nt-ip').classList.remove('hidden');
+      });
   }
 
-  if (!window.areEmailsInitialized) {
-    window.areEmailsInitialized = true;
-    document.addEventListener('DOMContentLoaded', () => initializeAll());
+  document.addEventListener('DOMContentLoaded', () => initializeAll());
+}
+
+/**
+ * Get root domain
+ */
+function domainRoot() {
+  var typeDomain = document.getElementById('nt-type-domain');
+  var ntDomain = document.getElementById('nt-domain');
+  var parseResult = parseDomain(location.hostname);
+
+  if (parseResult.type === ParseResultType.Listed || parseResult.type === ParseResultType.Reserved) {
+    var { domain, topLevelDomains } = parseResult;
+    document.getElementById('nt-text').innerHTML = 'domain';
+    typeDomain.innerHTML = 'Domain: ';
+    ntDomain.innerHTML = domain ? `${domain}.${topLevelDomains.join('.')}` : location.hostname;
+    console.log(domain);
+  } else if (parseResult.type === ParseResultType.Ip) {
+    document.getElementById('nt-text').innerHTML = 'IP access';
+    typeDomain.innerHTML = 'IP: ';
+    ntDomain.innerHTML = location.hostname;
   }
 }
 
+/**
+ * Load Script
+ */
+copyright();
 safeMail();
+// ntIp();
+domainRoot();

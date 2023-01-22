@@ -12,6 +12,8 @@
   body {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
-    @apply bg-slate-900 font-Saira;
+    text-align: center !important;
+    box-sizing: border-box;
+    @apply bg-slate-900;
   }
 }
